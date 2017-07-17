@@ -1,0 +1,19 @@
+{
+  "name": "Replace",
+  "id_name": "replace",
+  "category" : "Invisible Institute",
+  "parameters": [
+    {
+      "name": "To replace",
+      "id_name": "to_replace",
+      "type": "string",
+      "visible": true
+    },
+    {
+      "name": "Value",
+      "id_name": "value",
+      "type": "string",
+      "visible": true
+    }
+  ]
+}
