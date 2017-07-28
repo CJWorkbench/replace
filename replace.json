@@ -1,8 +1,8 @@
 {
-  "name": "Replace Text",
+  "name": "Replace the Text",
   "id_name": "replace",
   "category" : "Invisible Institute",
-  "description": "Replace text.",
+  "description": "Find and replace text in specific columns ",
   "parameters": [
     {
       "name": "To replace",
