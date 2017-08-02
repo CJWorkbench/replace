@@ -1,17 +1,17 @@
 {
-  "name": "Replace the Text",
+  "name": "Search And Replace Text",
   "id_name": "replace",
-  "category" : "Invisible Institute",
-  "description": "Find and replace text in specific columns ",
+  "category" : "Edit",
+  "description": "Find keyword and replace every instance with a specific value.",
   "parameters": [
     {
-      "name": "To replace",
+      "name": "Search for",
       "id_name": "to_replace",
       "type": "string",
       "visible": true
     },
     {
-      "name": "Value",
+      "name": "Replace with",
       "id_name": "value",
       "type": "string",
       "visible": true
