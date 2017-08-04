@@ -2,6 +2,7 @@
   "name": "Search And Replace Text",
   "id_name": "replace",
   "category" : "Edit",
+  "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
   "parameters": [
     {
