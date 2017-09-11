@@ -1,5 +1,5 @@
 {
-  "name": "Search And Replace Text",
+  "name": "Search And Replace Values",
   "id_name": "replace",
   "category" : "Edit",
   "icon": "edit",
@@ -12,7 +12,19 @@
       "visible": true
     },
     {
-      "name": "Replace with",
+      "name": "Match case",
+      "id_name": "match_case",
+      "type": "checkbox",
+      "default": "True"
+    },
+    {
+      "name": "Match entire cell content",
+      "id_name": "match_entire",
+      "type": "checkbox",
+      "default": "True"
+    },
+    {
+      "name": "Replace all instances with",
       "id_name": "value",
       "type": "string",
       "visible": true
