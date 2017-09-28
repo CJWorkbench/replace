@@ -1,7 +1,7 @@
 {
   "name": "Replace Values",
   "id_name": "replace",
-  "category" : "Edit",
+  "category" : "Analyse",
   "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
   "parameters": [
