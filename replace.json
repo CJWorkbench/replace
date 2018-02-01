@@ -4,6 +4,7 @@
   "category" : "Analyse",
   "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
+  "help_url":"modules/analyse/replace-values",
   "parameters": [
     {
       "name": "Search for",
