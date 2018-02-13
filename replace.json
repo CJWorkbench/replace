@@ -1,7 +1,7 @@
 {
   "name": "Search and replace",
   "id_name": "replace",
-  "category" : "Prepare",
+  "category" : "Analyze",
   "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
   "help_url":"modules/analyse/replace-values",
