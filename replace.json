@@ -1,10 +1,10 @@
 {
   "name": "Search and replace",
   "id_name": "replace",
-  "category" : "Edit",
+  "category" : "Clean",
   "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
-  "help_url":"modules/edit/replace-values",
+  "help_url":"modules/clean/replace-values",
   "parameters": [
     {
       "name": "Search for",
