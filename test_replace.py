@@ -55,7 +55,7 @@ class TestReplace(unittest.TestCase):
         for y in out['stringcol']:
             self.assertTrue(y == 'AAfredAA')
 
-            # datecol should only contain '2018'
+            # datecol should only contain '1964'
             params = {
                 'colnames': 'datecol',
                 'to_replace': '[^1964]',
