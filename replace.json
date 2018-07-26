@@ -7,8 +7,21 @@
   "help_url":"modules/clean/replace-values",
   "parameters": [
     {
+      "name": "In columns",
+      "id_name": "source-columns",
+      "type": "multicolumn",
+      "ui-only": true
+    },
+    {
+         "name": "Column Names",
+         "id_name": "colnames",
+         "type": "string",
+         "visible": false
+    },
+    {
       "name": "Search for",
       "id_name": "to_replace",
+      "multiline": false,
       "type": "string",
       "visible": true
     },
@@ -16,19 +29,26 @@
       "name": "Match case",
       "id_name": "match_case",
       "type": "checkbox",
-      "default": "True"
+      "default": "False"
     },
     {
-      "name": "Match entire cell content",
+      "name": "Regex",
+      "id_name": "regex",
+      "type": "checkbox",
+      "default": "False"
+    },
+    {
+      "name": "Content is exactly",
       "id_name": "match_entire",
       "type": "checkbox",
-      "default": "True"
+      "default": "False"
     },
     {
-      "name": "Replace all instances with",
-      "id_name": "value",
+      "name": "Replace with",
+      "id_name": "replace_with",
       "type": "string",
-      "visible": true
+      "visible": true,
+      "placeholder": "Enter label"
     }
   ]
 }

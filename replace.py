@@ -1,10 +1,25 @@
 def render(table, params):
+    # if no column has been selected, return table
+    if not params['colnames']:
+        return table
+
     to_replace = params['to_replace']
     match_case = params['match_case']
     match_entire = params['match_entire']
-    value = params['value']
+    replace_with = params['replace_with']
+    regex = params['regex']
+    columns = params['colnames'].split(',')
+    columns = [c.strip() for c in columns]
 
-    to_replace = re.escape(to_replace)
+    if not regex:
+        to_replace = re.escape(to_replace)
+
+    else:
+        try:
+            re.compile(to_replace)
+        except re.error:
+            raise ValueError('Invalid regular expression')
+
     if match_entire:
         to_replace = '^' + to_replace + '$'
 
@@ -13,5 +28,5 @@ def render(table, params):
     else:
         pattern = re.compile(to_replace, re.IGNORECASE)
 
-    df = table.replace(pattern, value)
-    return df
+    table[columns] = table[columns].astype(str).replace(pattern, replace_with)
+    return table
