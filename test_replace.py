@@ -34,8 +34,6 @@ class TestReplace(unittest.TestCase):
         self.simple_table['catcol'] = self.simple_table['catcol'].astype('category')
         self.simple_table['catcol2'] = self.simple_table['catcol2'].astype('category')
 
-        self.temp_table = pd.read_csv('bin/general_10000.csv', encoding='ISO-8859-1', dtype='category')
-
     def test_NOP(self):
         params = {'colnames': ''}
         out = render(self.table, params)
