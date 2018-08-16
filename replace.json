@@ -48,7 +48,7 @@
       "id_name": "replace_with",
       "type": "string",
       "visible": true,
-      "placeholder": "Enter label"
+      "placeholder": "Enter value"
     }
   ]
 }
