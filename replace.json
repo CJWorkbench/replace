@@ -19,11 +19,12 @@
          "visible": false
     },
     {
-      "name": "Search for",
+      "name": "",
       "id_name": "to_replace",
       "multiline": false,
       "type": "string",
-      "visible": true
+      "visible": true,
+      "placeholder": "Search for..."
     },
     {
       "name": "Match case",
