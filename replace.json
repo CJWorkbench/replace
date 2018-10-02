@@ -19,12 +19,12 @@
          "visible": false
     },
     {
-      "name": "",
+      "name": "Search for",
       "id_name": "to_replace",
       "multiline": false,
       "type": "string",
       "visible": true,
-      "placeholder": "Search for..."
+      "placeholder": "Type something"
     },
     {
       "name": "Match case",
@@ -49,7 +49,7 @@
       "id_name": "replace_with",
       "type": "string",
       "visible": true,
-      "placeholder": "Enter value"
+      "placeholder": "Type something"
     }
   ]
 }
