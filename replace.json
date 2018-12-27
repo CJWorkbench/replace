@@ -1,22 +1,15 @@
 {
   "name": "Find & replace",
   "id_name": "replace",
-  "category" : "Clean",
+  "category": "Clean",
   "icon": "edit",
   "description": "Find key words and replace every instance with a specific value.",
-  "help_url":"modules/clean/replace-values",
+  "help_url": "modules/clean/replace-values",
   "parameters": [
     {
-      "name": "In columns",
-      "id_name": "source-columns",
-      "type": "multicolumn",
-      "ui-only": true
-    },
-    {
-         "name": "Column Names",
-         "id_name": "colnames",
-         "type": "string",
-         "visible": false
+      "name": "",
+      "id_name": "colnames",
+      "type": "multicolumn"
     },
     {
       "name": "Search for",
