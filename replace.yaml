@@ -1,0 +1,28 @@
+id_name: replace
+name: 'Search & replace'
+category: Clean
+icon: edit
+description: Find phrases and replace every instance with a specific value.
+help_url: modules/clean/replace-values
+parameters:
+- id_name: colnames
+  type: multicolumn
+  name: ''
+  column_types: [ text ]
+- id_name: to_replace
+  type: string
+  name: Search for
+  placeholder: Type something
+- id_name: match_case
+  type: checkbox
+  name: Match case
+- id_name: regex
+  type: checkbox
+  name: Regex
+- id_name: match_entire
+  type: checkbox
+  name: Content is exactly
+- id_name: replace_with
+  type: string
+  name: Replace with
+  placeholder: Type something

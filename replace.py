@@ -1,66 +1,91 @@
-def render(table, params):
-    # if no column has been selected, return table
-    if not params['colnames'] or not params['to_replace']:
+from dataclasses import dataclass
+import re
+from typing import List
+import pandas as pd
+
+
+@dataclass
+class Form:
+    to_replace: str
+    replace_with: str
+    match_case: bool
+    match_entire: bool
+    regex: bool
+    colnames: List[str]
+
+    def __post_init__(self):
+        # set self._regex, the re.Pattern we'll pass to pandas.
+        if self.regex:
+            regex = self.to_replace
+        else:
+            regex = re.escape(self.to_replace)
+        if self.match_entire:
+            regex = r'\A' + regex + r'\Z'
+        if self.match_case:
+            flags = 0
+        else:
+            flags = re.IGNORECASE
+        self._regex = re.compile(regex, flags)
+
+    @classmethod
+    def parse(cls, *, colnames: str, **kwargs):
+        if not colnames:
+            colnames = []
+        else:
+            colnames = colnames.split(',')
+        return cls(colnames=colnames, **kwargs)
+
+    def process_table(self, table: pd.DataFrame) -> pd.DataFrame:
+        for column in self.colnames:
+            table[column] = self.process_series(table[column])
         return table
 
-    to_replace = params['to_replace']
-    match_case = params['match_case']
-    match_entire = params['match_entire']
-    replace_with = params['replace_with']
-    regex = params['regex']
-    columns = params['colnames'].split(',')
-    columns = [c.strip() for c in columns]
-
-    # Detect if input is a number or string
-    try:
-        replace_with = int(replace_with)
-    except ValueError:
-        pass
-
-    if not regex:
-        to_replace = re.escape(to_replace)
-
-    else:
-        try:
-            re.compile(to_replace)
-        except re.error:
-            raise ValueError('Invalid regular expression')
-
-    if match_entire:
-        to_replace = '^' + to_replace + '$'
-
-    if match_case:
-        pattern = re.compile(to_replace)
-    else:
-        pattern = re.compile(to_replace, re.IGNORECASE)
-
-    for column in columns:
-        if pd.api.types.infer_dtype(table[column]) != 'categorical':
-            # Convert column to string (or retain category) if regex
-            dtype = table[column].dtype
-            table[column] = table[column].astype(str).replace(pattern, str(replace_with))
-            # try to convert back to dtype
-            table[column] = table[column].astype(dtype, errors='ignore')
-
-        # for categories, perform replace on index
+    def process_series(self, series: pd.Series) -> pd.Series:
+        if hasattr(series, 'cat'):
+            return self._process_categorical(series)
         else:
-            # All to string for now, .replace does not work on numerical categories
-            cat_dtype = table[column].cat.categories.dtype
-            new_index = pd.Series(table[column].cat.categories).astype(str).replace(pattern, str(replace_with))
-            # Check if duplicates
-            if not any(new_index.duplicated()):
-                # Try to cast back to original dtype
-                try:
-                    table[column] = table[column].cat.rename_categories(new_index.astype(cat_dtype))
-                except (TypeError, ValueError):
-                    table[column] = table[column].cat.rename_categories(new_index)
-            else:
-                category_mask = table[column].cat.categories.str.contains(pattern)
-                diff = set(new_index) - set(table[column].cat.categories)
-                table[column].cat.add_categories(diff, inplace=True)
-                series_index = table[column].cat.codes[lambda x: category_mask[x]].index
+            return self._process_str(series)
 
-                table[column].iloc[series_index] = table[column][series_index].str.replace(pattern, str(replace_with))
-                table[column].cat.remove_unused_categories(inplace=True)
+    def _process_categorical(self, series: pd.Series) -> pd.Series:
+        # Replace categorical directly, so we only inspect each string once and
+        # we don't consume much RAM.
 
-    return table
+        # Categories are Arrays -- meaning they map "code" -> "category"
+        old_categories = series.cat.categories
+        # new_categories_with_dups has new "category" values but same "codes"
+        new_categories_with_dups = (
+            series.cat.categories
+            .str.replace(self._regex, self.replace_with)
+        )
+        # new_categories: the categories we want in the end.
+        # We want them sorted, because unit tests care.
+        new_categories = new_categories_with_dups.unique().sort_values()
+
+        # invert "new_categories": we'll map from "new_category" -> "code"
+        new_category_to_code = dict(zip(new_categories, range(len(new_categories))))
+
+        # map from old-"code" to new-"code". Remember: new_categories_with_dups
+        # uses the old "codes".
+        code_renames = new_categories_with_dups.map(new_category_to_code)
+
+        new_codes = code_renames[series.cat.codes]
+
+        ret = pd.Categorical.from_codes(new_codes, new_categories)
+        return ret
+
+    def _process_str(self, series: pd.Series) -> pd.Series:
+        return series.replace(self._regex, self.replace_with)
+
+
+
+def render(table, params):
+    try:
+        form = Form.parse(**params)
+    except ValueError as err:
+        return 'Invalid regular expression: ' + str(err)
+
+    if not form.colnames or not form.to_replace:
+        # if no column has been selected, return table
+        return table
+
+    return form.process_table(table)
