@@ -25,6 +25,14 @@ class TestReplace(unittest.TestCase):
         result = render(table, P())
         assert_frame_equal(result, pd.DataFrame({'A': ['a', 'b']}))
 
+    def test_invalid_regex(self):
+        result = render(pd.DataFrame({'A': ['a']}),
+                        P(colnames='A', to_replace='(', regex=True))
+        self.assertEqual(result, (
+            'Invalid regular expression: missing ), '
+            'unterminated subpattern at position 0'
+        ))
+
     def test_regex_str_case_insensitive(self):
         table = pd.DataFrame({'A': ['AaAfredaAaA', 'aAaAfredaAAaaa']})
         result = render(table, P(colnames='A', to_replace='[a]',

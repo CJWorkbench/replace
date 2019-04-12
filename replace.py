@@ -81,7 +81,7 @@ class Form:
 def render(table, params):
     try:
         form = Form.parse(**params)
-    except ValueError as err:
+    except re.error as err:
         return 'Invalid regular expression: ' + str(err)
 
     if not form.colnames or not form.to_replace:
