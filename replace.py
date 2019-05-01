@@ -77,7 +77,6 @@ class Form:
         return series.replace(self._regex, self.replace_with)
 
 
-
 def render(table, params):
     try:
         form = Form.parse(**params)
@@ -89,3 +88,17 @@ def render(table, params):
         return table
 
     return form.process_table(table)
+
+
+def _migrate_params_v0_to_v1(params):
+    """v0: colnames is comma-separated str. v1: colnames is List[str]."""
+    return {
+        **params,
+        'colnames': [c for c in params['colnames'].split(',') if c],
+    }
+
+
+def migrate_params(params):
+    if isinstance(params['colnames'], str):
+        params = _migrate_params_v0_to_v1(params)
+    return params

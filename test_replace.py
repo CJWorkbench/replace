@@ -3,7 +3,60 @@ from typing import Any, Dict
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
-from replace import render
+from replace import migrate_params, render
+
+
+class MigrateParamsTest(unittest.TestCase):
+    def test_v0_no_colnames(self):
+        self.assertEqual(migrate_params({
+            'colnames': '',
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        }), {
+            'colnames': [],
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        })
+
+    def test_v0_with_colnames(self):
+        self.assertEqual(migrate_params({
+            'colnames': 'A,B',
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        }), {
+            'colnames': ['A', 'B'],
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        })
+
+    def test_v1(self):
+        self.assertEqual(migrate_params({
+            'colnames': ['A', 'B'],
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        }), {
+            'colnames': ['A', 'B'],
+            'to_replace': 'x',
+            'replace_with': 'y',
+            'match_case': False,
+            'match_entire': True,
+            'regex': False,
+        })
 
 
 def P(colnames: str = '', to_replace: str = '', replace_with: str = '',
@@ -19,7 +72,7 @@ def P(colnames: str = '', to_replace: str = '', replace_with: str = '',
     }
 
 
-class TestReplace(unittest.TestCase):
+class RenderTest(unittest.TestCase):
     def test_NOP(self):
         table = pd.DataFrame({'A': ['a', 'b']})
         result = render(table, P())
