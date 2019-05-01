@@ -27,14 +27,6 @@ class Form:
             flags = re.IGNORECASE
         self._regex = re.compile(regex, flags)
 
-    @classmethod
-    def parse(cls, *, colnames: str, **kwargs):
-        if not colnames:
-            colnames = []
-        else:
-            colnames = colnames.split(',')
-        return cls(colnames=colnames, **kwargs)
-
     def process_table(self, table: pd.DataFrame) -> pd.DataFrame:
         for column in self.colnames:
             table[column] = self.process_series(table[column])
@@ -79,7 +71,7 @@ class Form:
 
 def render(table, params):
     try:
-        form = Form.parse(**params)
+        form = Form(**params)
     except re.error as err:
         return 'Invalid regular expression: ' + str(err)
 
