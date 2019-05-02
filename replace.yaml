@@ -9,7 +9,6 @@ parameters:
   type: multicolumn
   name: ''
   column_types: [ text ]
-  deprecated_string_storage: false
 - id_name: to_replace
   type: string
   name: Search for
