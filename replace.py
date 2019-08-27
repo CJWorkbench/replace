@@ -20,7 +20,7 @@ class Form:
         else:
             regex = re.escape(self.to_replace)
         if self.match_entire:
-            regex = r'\A' + regex + r'\Z'
+            regex = r"\A" + regex + r"\Z"
         if self.match_case:
             flags = 0
         else:
@@ -33,7 +33,7 @@ class Form:
         return table
 
     def process_series(self, series: pd.Series) -> pd.Series:
-        if hasattr(series, 'cat'):
+        if hasattr(series, "cat"):
             return self._process_categorical(series)
         else:
             return self._process_str(series)
@@ -45,9 +45,8 @@ class Form:
         # Categories are Arrays -- meaning they map "code" -> "category"
         old_categories = series.cat.categories
         # new_categories_with_dups has new "category" values but same "codes"
-        new_categories_with_dups = (
-            series.cat.categories
-            .str.replace(self._regex, self.replace_with)
+        new_categories_with_dups = series.cat.categories.str.replace(
+            self._regex, self.replace_with
         )
         # new_categories: the categories we want in the end.
         # We want them sorted, because unit tests care.
@@ -73,7 +72,7 @@ def render(table, params):
     try:
         form = Form(**params)
     except re.error as err:
-        return 'Invalid regular expression: ' + str(err)
+        return "Invalid regular expression: " + str(err)
 
     if not form.colnames or not form.to_replace:
         # if no column has been selected, return table
@@ -84,13 +83,10 @@ def render(table, params):
 
 def _migrate_params_v0_to_v1(params):
     """v0: colnames is comma-separated str. v1: colnames is List[str]."""
-    return {
-        **params,
-        'colnames': [c for c in params['colnames'].split(',') if c],
-    }
+    return {**params, "colnames": [c for c in params["colnames"].split(",") if c]}
 
 
 def migrate_params(params):
-    if isinstance(params['colnames'], str):
+    if isinstance(params["colnames"], str):
         params = _migrate_params_v0_to_v1(params)
     return params
