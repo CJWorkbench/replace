@@ -74,8 +74,8 @@ def render(table, params):
     except re.error as err:
         return "Invalid regular expression: " + str(err)
 
-    if not form.colnames or not form.to_replace:
-        # if no column has been selected, return table
+    if not form.to_replace and not form.match_entire:
+        # User did not enter a search term
         return table
 
     return form.process_table(table)

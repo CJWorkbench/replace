@@ -166,6 +166,34 @@ class RenderTest(unittest.TestCase):
         )
         assert_frame_equal(result, pd.DataFrame({"A": ["y", "xa"]}))
 
+    def test_match_entire_empty_search(self):
+        table = pd.DataFrame({"A": ["x", "", np.nan]})
+        result = render(
+            table,
+            P(
+                colnames=["A"],
+                to_replace="",
+                replace_with="y",
+                regex=False,
+                match_entire=True,
+            ),
+        )
+        assert_frame_equal(result, pd.DataFrame({"A": ["x", "y", np.nan]}))
+
+    def test_match_entire_regex_empty_search(self):
+        table = pd.DataFrame({"A": ["x", "", np.nan]})
+        result = render(
+            table,
+            P(
+                colnames=["A"],
+                to_replace="",
+                replace_with="y",
+                regex=True,
+                match_entire=True,
+            ),
+        )
+        assert_frame_equal(result, pd.DataFrame({"A": ["x", "y", np.nan]}))
+
     def test_categorical_rename_one_category(self):
         table = pd.DataFrame({"A": ["a", "b", "c", "b"]}, dtype="category")
         result = render(table, P(colnames=["A"], to_replace="a", replace_with="d"))
