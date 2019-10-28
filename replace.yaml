@@ -3,7 +3,7 @@ name: 'Search & replace'
 category: Clean
 icon: edit
 description: Find phrases and replace every instance with a specific value.
-help_url: modules/clean/replace-values
+help_url: modules/clean/search-and-replace
 parameters:
 - id_name: colnames
   type: multicolumn
