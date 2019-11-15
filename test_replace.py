@@ -217,6 +217,13 @@ class RenderTest(unittest.TestCase):
             result, pd.DataFrame({"A": ["c", "b", "c", "b"]}, dtype="category")
         )
 
+    def test_categorical_do_not_replace_null(self):
+        table = pd.DataFrame({"A": ["a", "b", None, "a", None]}, dtype="category")
+        result = render(table, P(colnames=["A"], to_replace="a", replace_with="X"))
+        assert_frame_equal(
+            result, pd.DataFrame({"A": ["X", "b", None, "X", None]}, dtype="category")
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

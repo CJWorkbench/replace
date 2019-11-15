@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import re
 from typing import List
+import numpy as np
 import pandas as pd
 
 
@@ -58,8 +59,9 @@ class Form:
         # map from old-"code" to new-"code". Remember: new_categories_with_dups
         # uses the old "codes".
         code_renames = new_categories_with_dups.map(new_category_to_code)
+        code_renames_with_null = np.append(code_renames.values, [-1])
 
-        new_codes = code_renames[series.cat.codes]
+        new_codes = code_renames_with_null[series.cat.codes]
 
         ret = pd.Categorical.from_codes(new_codes, new_categories)
         return ret
