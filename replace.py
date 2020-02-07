@@ -3,6 +3,7 @@ import re
 from typing import List
 import numpy as np
 import pandas as pd
+from cjwmodule import i18n
 
 
 @dataclass
@@ -74,7 +75,11 @@ def render(table, params):
     try:
         form = Form(**params)
     except re.error as err:
-        return "Invalid regular expression: " + str(err)
+        return i18n.trans(
+            "error.regex.general",
+            "Invalid regular expression: {error}",
+            {"error": str(err)}
+        )
 
     if not form.to_replace and not form.match_entire:
         # User did not enter a search term

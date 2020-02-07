@@ -1,0 +1,41 @@
+#. default-message: Search & replace
+msgid "_spec.name"
+msgstr ""
+
+#. default-message: Find key words and replace every instance with a specific value.
+msgid "_spec.description"
+msgstr ""
+
+#. default-message: Search for
+msgid "_spec.parameters.to_replace.name"
+msgstr ""
+
+#. default-message: Type something
+msgid "_spec.parameters.to_replace.placeholder"
+msgstr ""
+
+#. default-message: Match case
+msgid "_spec.parameters.match_case.name"
+msgstr ""
+
+#. default-message: Regex
+msgid "_spec.parameters.regex.name"
+msgstr ""
+
+#. default-message: Content is exactly
+msgid "_spec.parameters.match_entire.name"
+msgstr ""
+
+#. default-message: Replace with
+msgid "_spec.parameters.replace_with.name"
+msgstr ""
+
+#. default-message: Type something
+msgid "_spec.parameters.replace_with.placeholder"
+msgstr ""
+
+#. default-message: Invalid regular expression: {error}
+#: replace.py:81
+msgid "error.regex.general"
+msgstr ""
+

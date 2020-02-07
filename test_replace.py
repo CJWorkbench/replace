@@ -4,6 +4,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
 from replace import migrate_params, render
+from cjwmodule.testing.i18n import i18n_message
 
 
 class MigrateParamsTest(unittest.TestCase):
@@ -104,9 +105,9 @@ class RenderTest(unittest.TestCase):
         )
         self.assertEqual(
             result,
-            (
-                "Invalid regular expression: missing ), "
-                "unterminated subpattern at position 0"
+            i18n_message(
+                "error.regex.general",
+                {"error": "missing ), unterminated subpattern at position 0"}
             ),
         )
 
