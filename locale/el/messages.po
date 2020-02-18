@@ -1,0 +1,54 @@
+# Greek translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-02-18 16:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: el\n"
+"Language-Team: el <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+msgid "_spec.name"
+msgstr "Αναζήτηση & αντικατάσταση"
+
+msgid "_spec.description"
+msgstr ""
+"Αναζήτηση λέξεων-κλειδιών και αντικατάσταση κάθε ευρήματος με μια "
+"συγκεκριμένη τιμή."
+
+msgid "_spec.parameters.to_replace.name"
+msgstr "Αναζήτηση για"
+
+msgid "_spec.parameters.to_replace.placeholder"
+msgstr "Πληκτρολόγησε κάτι"
+
+msgid "_spec.parameters.match_case.name"
+msgstr "Ταίριασμα πεζών-κεφαλαίων"
+
+msgid "_spec.parameters.regex.name"
+msgstr "Κανονική έκφραση"
+
+msgid "_spec.parameters.match_entire.name"
+msgstr "Το περιεχόμενο είναι ακριβώς"
+
+msgid "_spec.parameters.replace_with.name"
+msgstr "Αντικατάσταση με"
+
+msgid "_spec.parameters.replace_with.placeholder"
+msgstr "Πληκτρολόγησε κάτι"
+
+#: replace.py:81
+msgid "error.regex.general"
+msgstr ""
+
