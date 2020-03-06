@@ -50,5 +50,5 @@ msgstr "Πληκτρολόγησε κάτι"
 
 #: replace.py:81
 msgid "error.regex.general"
-msgstr ""
+msgstr "Άκυρη κανονική έκφραση: {error}"
 
