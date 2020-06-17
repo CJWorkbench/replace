@@ -111,6 +111,33 @@ class RenderTest(unittest.TestCase):
             ),
         )
 
+    def test_replace_regex_with_invalid_escape_sequence(self):
+        # Raised error 2020-06-17
+        result = render(
+            pd.DataFrame({"A": ["a"], "B": pd.Series(["b"], dtype="category")}),
+            P(colnames=["A"], to_replace="a", regex=True, replace_with="\\s")
+        )
+        self.assertEqual(
+            result,
+            i18n_message(
+                "error.replace_with.template",
+                {"error": "bad escape \\s at position 0"}
+            ),
+        )
+
+    def test_replace_non_regex_with_invalid_escape_sequence(self):
+        # Raised error 2020-06-17
+        #
+        # Pandas simply assumes a backslash means regex, even when you pass the
+        # regex=False argument. Test that we undo Pandas' madness.
+        result = render(
+            pd.DataFrame({"A": ["a"], "B": pd.Series(["b"], dtype="category")}),
+            P(colnames=["A"], to_replace="a", regex=False, replace_with="\\s")
+        )
+        assert_frame_equal(
+            result, pd.DataFrame({"A": ["\\s"], "B": pd.Series(["b"], dtype="category")})
+        )
+
     def test_regex_str_case_insensitive(self):
         table = pd.DataFrame({"A": ["AaAfredaAaA", "aAaAfredaAAaaa"]})
         result = render(
@@ -223,6 +250,16 @@ class RenderTest(unittest.TestCase):
         result = render(table, P(colnames=["A"], to_replace="a", replace_with="X"))
         assert_frame_equal(
             result, pd.DataFrame({"A": ["X", "b", None, "X", None]}, dtype="category")
+        )
+
+    def test_replace_with_escape_sequence(self):
+        result = render(
+            pd.DataFrame({"A": ["aBc"], "B": pd.Series(["bCd"], dtype="category")}),
+            P(colnames=["A", "B"], to_replace="([bB])([cC])", regex=True,
+              replace_with="\\2 \\1")
+        )
+        assert_frame_equal(
+            result, pd.DataFrame({"A": ["ac B"], "B": pd.Series(["C bd"], dtype="category")})
         )
 
 

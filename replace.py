@@ -1,9 +1,13 @@
 from dataclasses import dataclass
 import re
+import sre_parse
 from typing import List
 import numpy as np
 import pandas as pd
 from cjwmodule import i18n
+
+
+class RegexError(Exception): pass
 
 
 @dataclass
@@ -27,7 +31,45 @@ class Form:
             flags = 0
         else:
             flags = re.IGNORECASE
-        self._regex = re.compile(regex, flags)
+
+        errors = []
+        try:
+            self._regex = re.compile(regex, flags)
+        except re.error as err:
+            raise RegexError(
+                i18n.trans(
+                    "error.regex.general",
+                    "Invalid regular expression: {error}",
+                    {"error": str(err)}
+                )
+            ) from None
+
+        if self.regex:
+            # With a regex, "Replace With" is a template. It may have a "\1" or
+            # some-such; so we can only detect errors after the template is
+            # compiled.
+            #
+            # sre_parse.parse_template() will actually be invoked by Python's
+            # `re` module for each value. We run it one extra time here to
+            # generate the error message if there is one.
+            #
+            # [2020-06-17, adamhooper] `sre_parse.expand_template` seems to be
+            # the logic we want, dammit: compile the template once, then reuse
+            # it on each row. TODO benchmark and maybe submit a pull request to
+            # Pandas (or rewrite using re._subx and Pyarrow).
+            try:
+                sre_parse.parse_template(self.replace_with, self._regex)
+                self._repl = self.replace_with
+            except re.error as err:
+                raise RegexError(
+                    i18n.trans(
+                        "error.replace_with.template",
+                        "Invalid replacement template: {error}",
+                        {"error": str(err)}
+                    )
+                ) from None
+        else:
+            self._repl = re.escape(self.replace_with)
 
     def process_table(self, table: pd.DataFrame) -> pd.DataFrame:
         for column in self.colnames:
@@ -48,7 +90,7 @@ class Form:
         old_categories = series.cat.categories
         # new_categories_with_dups has new "category" values but same "codes"
         new_categories_with_dups = series.cat.categories.str.replace(
-            self._regex, self.replace_with
+            self._regex, self._repl
         )
         # new_categories: the categories we want in the end.
         # We want them sorted, because unit tests care.
@@ -68,18 +110,14 @@ class Form:
         return ret
 
     def _process_str(self, series: pd.Series) -> pd.Series:
-        return series.replace(self._regex, self.replace_with)
+        return series.replace(self._regex, self._repl)
 
 
 def render(table, params):
     try:
         form = Form(**params)
-    except re.error as err:
-        return i18n.trans(
-            "error.regex.general",
-            "Invalid regular expression: {error}",
-            {"error": str(err)}
-        )
+    except RegexError as err:
+        return err.args[0]
 
     if not form.to_replace and not form.match_entire:
         # User did not enter a search term
