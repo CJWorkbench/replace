@@ -35,12 +35,12 @@ msgid "_spec.parameters.replace_with.placeholder"
 msgstr ""
 
 #. default-message: Invalid regular expression: {error}
-#: replace.py:43
+#: replace.py:44
 msgid "error.regex.general"
 msgstr ""
 
 #. default-message: Invalid replacement template: {error}
-#: replace.py:68
+#: replace.py:69
 msgid "error.replace_with.template"
 msgstr ""
 

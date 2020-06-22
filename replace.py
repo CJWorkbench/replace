@@ -7,7 +7,8 @@ import pandas as pd
 from cjwmodule import i18n
 
 
-class RegexError(Exception): pass
+class RegexError(Exception):
+    pass
 
 
 @dataclass
@@ -40,7 +41,7 @@ class Form:
                 i18n.trans(
                     "error.regex.general",
                     "Invalid regular expression: {error}",
-                    {"error": str(err)}
+                    {"error": str(err)},
                 )
             ) from None
 
@@ -65,11 +66,23 @@ class Form:
                     i18n.trans(
                         "error.replace_with.template",
                         "Invalid replacement template: {error}",
-                        {"error": str(err)}
+                        {"error": str(err)},
                     )
                 ) from None
         else:
-            self._repl = re.escape(self.replace_with)
+            # Pandas is going to pass `replace_with` as the repl argument to
+            # re.sub(). That's soooooo annoying, because repl doesn't behave
+            # like a string.
+            #
+            # https://docs.python.org/3/library/re.html#re.sub:
+            #
+            # repl can be a string or a function; if it is a string, any
+            # backslash escapes in it are processed. That is, \n is converted
+            # to a single newline character, \r is converted to a carriage
+            # return, and so forth. Unknown escapes of ASCII letters are
+            # reserved for future use and treated as errors. Other unknown
+            # escapes such as \& are left alone.
+            self._repl = self.replace_with.replace("\\", "\\\\")
 
     def process_table(self, table: pd.DataFrame) -> pd.DataFrame:
         for column in self.colnames:

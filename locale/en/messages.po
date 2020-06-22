@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-06-17 14:40+0000\n"
+"POT-Creation-Date: 2020-06-22 13:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -46,11 +46,11 @@ msgstr "Replace with"
 msgid "_spec.parameters.replace_with.placeholder"
 msgstr "Type something"
 
-#: replace.py:43
+#: replace.py:44
 msgid "error.regex.general"
 msgstr "Invalid regular expression: {error}"
 
-#: replace.py:68
+#: replace.py:69
 msgid "error.replace_with.template"
 msgstr "Invalid replacement template: {error}"
 

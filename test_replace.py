@@ -107,7 +107,7 @@ class RenderTest(unittest.TestCase):
             result,
             i18n_message(
                 "error.regex.general",
-                {"error": "missing ), unterminated subpattern at position 0"}
+                {"error": "missing ), unterminated subpattern at position 0"},
             ),
         )
 
@@ -115,27 +115,38 @@ class RenderTest(unittest.TestCase):
         # Raised error 2020-06-17
         result = render(
             pd.DataFrame({"A": ["a"], "B": pd.Series(["b"], dtype="category")}),
-            P(colnames=["A"], to_replace="a", regex=True, replace_with="\\s")
+            P(colnames=["A"], to_replace="a", regex=True, replace_with="\\s"),
         )
         self.assertEqual(
             result,
             i18n_message(
-                "error.replace_with.template",
-                {"error": "bad escape \\s at position 0"}
+                "error.replace_with.template", {"error": "bad escape \\s at position 0"}
             ),
         )
 
-    def test_replace_non_regex_with_invalid_escape_sequence(self):
+    def test_replace_str_with_invalid_escape_sequence(self):
         # Raised error 2020-06-17
         #
         # Pandas simply assumes a backslash means regex, even when you pass the
         # regex=False argument. Test that we undo Pandas' madness.
         result = render(
             pd.DataFrame({"A": ["a"], "B": pd.Series(["b"], dtype="category")}),
-            P(colnames=["A"], to_replace="a", regex=False, replace_with="\\s")
+            P(colnames=["A"], to_replace="a", regex=False, replace_with=r"\s\t"),
         )
         assert_frame_equal(
-            result, pd.DataFrame({"A": ["\\s"], "B": pd.Series(["b"], dtype="category")})
+            result,
+            pd.DataFrame({"A": [r"\s\t"], "B": pd.Series(["b"], dtype="category")}),
+        )
+
+    def test_replace_str_without_adding_backslash(self):
+        # Doubling down after test_replace_str_with_invalid_escape_sequence
+        result = render(
+            pd.DataFrame({"A": ["a"], "B": pd.Series(["a"], dtype="category")}),
+            P(colnames=["A", "B"], to_replace="a", regex=False, replace_with="b c"),
+        )
+        assert_frame_equal(
+            result,
+            pd.DataFrame({"A": ["b c"], "B": pd.Series(["b c"], dtype="category")}),
         )
 
     def test_regex_str_case_insensitive(self):
@@ -255,11 +266,16 @@ class RenderTest(unittest.TestCase):
     def test_replace_with_escape_sequence(self):
         result = render(
             pd.DataFrame({"A": ["aBc"], "B": pd.Series(["bCd"], dtype="category")}),
-            P(colnames=["A", "B"], to_replace="([bB])([cC])", regex=True,
-              replace_with="\\2 \\1")
+            P(
+                colnames=["A", "B"],
+                to_replace="([bB])([cC])",
+                regex=True,
+                replace_with="\\2 \\1",
+            ),
         )
         assert_frame_equal(
-            result, pd.DataFrame({"A": ["ac B"], "B": pd.Series(["C bd"], dtype="category")})
+            result,
+            pd.DataFrame({"A": ["ac B"], "B": pd.Series(["C bd"], dtype="category")}),
         )
 
 

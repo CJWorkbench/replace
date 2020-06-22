@@ -1,3 +1,9 @@
+2020-06-22.01
+-------------
+
+* When `regex=False`, don't add backslashes before replacement spaces. (This
+  was a regression in 2020-06-17.01.)
+
 2020-06-17.01
 -------------
 
