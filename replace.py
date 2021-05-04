@@ -69,7 +69,7 @@ def build_replacement(*, replace_with: str, regex: bool):
         return replace_with.replace("\\", "\\\\")
 
 
-def render_arrow_v1(table, params):
+def render_arrow_v1(table, params, **kwargs):
     if params["regex"]:
         # Validate regex.
         #
