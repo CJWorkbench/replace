@@ -1,3 +1,11 @@
+2021-05-04.01
+-------------
+
+* Fix crash on some category replacements.
+* Change regex syntax to re2: https://github.com/google/re2/wiki/Syntax
+
+(Internally, this is a rewrite using Arrow instead of Pandas.)
+
 2020-06-22.01
 -------------
 

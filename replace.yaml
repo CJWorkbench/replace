@@ -2,7 +2,7 @@ id_name: replace
 name: 'Search & replace'
 category: Clean
 icon: edit
-description: Find key words and replace every instance with a specific value.
+description: Find and replace every instance of text with different text.
 help_url: modules/clean/search-and-replace
 parameters:
 - id_name: colnames
