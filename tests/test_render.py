@@ -164,6 +164,25 @@ def test_str_str_case_sensitive():
     )
 
 
+def test_replace_nulls():
+    result = render(
+        make_table(make_column("A", ["foo", None, "floo", None, "few", "fu"])),
+        P(
+            colnames=["A"],
+            to_replace="(o)",
+            match_case=True,
+            regex=True,
+            replace_with="O\\1",
+        ),
+    )
+    assert_result_equals(
+        result,
+        ArrowRenderResult(
+            make_table(make_column("A", ["fOoOo", None, "flOoOo", None, "few", "fu"]))
+        ),
+    )
+
+
 def test_match_entire_regex():
     result = render(
         make_table(make_column("A", ["x", "xa"])),
@@ -278,6 +297,14 @@ def test_categorical_do_not_replace_null():
             make_table(make_column("A", ["X", "b", None, "X", None], dictionary=True))
         ),
     )
+
+
+def test_replace_crash_12774():
+    # https://issues.apache.org/jira/browse/ARROW-12774
+    table = make_table(make_column("A", ["a"] * 16))
+    result = render(table, P(colnames=["A"], to_replace="X", replace_with="Y"))
+    result.table[0].validate(full=True)
+    assert_result_equals(result, ArrowRenderResult(table))
 
 
 def test_replace_with_escape_sequence():

@@ -2,7 +2,7 @@
 msgid "_spec.name"
 msgstr ""
 
-#. default-message: Find key words and replace every instance with a specific value.
+#. default-message: Find and replace every instance of text with different text.
 msgid "_spec.description"
 msgstr ""
 
@@ -35,12 +35,12 @@ msgid "_spec.parameters.replace_with.placeholder"
 msgstr ""
 
 #. default-message: Invalid regular expression: {error}
-#: replace.py:44
+#: replace.py:106
 msgid "error.regex.general"
 msgstr ""
 
-#. default-message: Invalid replacement template: {error}
-#: replace.py:69
+#. default-message: Invalid replacement: {error}
+#: replace.py:128
 msgid "error.replace_with.template"
 msgstr ""
 

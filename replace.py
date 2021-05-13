@@ -41,10 +41,27 @@ def _process_nonempty_utf8(
     return pa.chunked_array(chunks, chunks[0].type)
 
 
+def _replace_substring_regex_workaround_12774(
+    array: pa.Array, *, pattern: str, replacement: str
+) -> pa.Array:
+    # https://issues.apache.org/jira/browse/ARROW-12774
+    if len(array) > 0 and len(array) % 16 == 0:
+        chunked_array = pa.chunked_array(
+            [array.slice(0, 1), array.slice(1)], type=array.type
+        )
+        return pa.compute.replace_substring_regex(
+            chunked_array, pattern=pattern, replacement=replacement
+        ).combine_chunks()
+    else:
+        return pa.compute.replace_substring_regex(
+            array, pattern=pattern, replacement=replacement
+        )
+
+
 def _process_array(
     array: pa.StringArray, pattern: str, replacement: str
 ) -> pa.StringArray:
-    return pa.compute.replace_substring_regex(
+    return _replace_substring_regex_workaround_12774(
         array, pattern=pattern, replacement=replacement
     )
 
